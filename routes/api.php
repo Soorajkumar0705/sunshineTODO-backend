@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TodoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +24,9 @@ Route::post("/register",[AuthController::class,'register']);
 Route::post("/login",[AuthController::class,'login']);
 
 Route::middleware('auth_session')->group(function(){
-   
+   Route::get('/todo',[TodoController::class,'index']); 
+   Route::post('/todo/store',[TodoController::class,'store']);
+   Route::post('/todo/{todo_id}/show',[TodoController::class,'show']);
+   Route::post('/todo/{todo_id}/update',[TodoController::class,'update']);
+   Route::post('/todo/{todo_id}/delete',[TodoController::class,'delete']);
 });
