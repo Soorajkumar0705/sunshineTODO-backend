@@ -10,6 +10,7 @@ class TodoService{
     public function getTodosByUserId($user_id){
         return Todo::where('user_id',$user_id)
         ->orderBy('isFavorite','desc')
+        ->orderBy('created_at','desc')
         ->paginate(30);
     }
 
@@ -19,6 +20,7 @@ class TodoService{
             'priority'=>$payload['priority'],
             'title'=>$payload['title'],
             'description'=>$payload['description'],
+            'due_date'=>$payload['due_date']
         ]);
     }
 

@@ -15,6 +15,7 @@ class Todo extends Model
         'priority',
         'isFavorite',
         'isCompleted',
-        'user_id'
+        'user_id',
+        'due_date',
     ];
 }

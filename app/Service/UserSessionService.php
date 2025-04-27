@@ -19,7 +19,7 @@ class UserSessionService{
             ->select('id', 'user_id')
             ->where('token', $session_token)
             ->with([
-                'user:id,name,email',
+                'user'
             ])
             ->first();
     }

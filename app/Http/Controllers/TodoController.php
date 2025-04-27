@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Todo\StoreRequest;
 use App\Service\TodoService;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -38,12 +39,14 @@ class TodoController extends Controller
             DB::beginTransaction();
             
             $user_id = $request->get('user')->id;
-
+            $date = Carbon::parse($request->due_date)->toDateString();
+            
                 $payload = [
                     'user_id'=>$user_id,
                     'title'=>$request->title,
                     'description'=>$request->description,
-                    'priority'=>$request->priority
+                    'priority'=>$request->priority,
+                    'due_date'=>$date,
                 ];
                 
                 $todo = $this->todoService->store($payload);
@@ -74,6 +77,9 @@ class TodoController extends Controller
             
             $request->user_id = $payload['user_id'];
 
+            if($request->due_date){
+                $request['due_date'] = Carbon::parse($request->due_date)->toDateString();
+            }
             $updateTodo = $this->todoService->updateTodo($todo,$request->all());
 
             DB::commit();
@@ -89,7 +95,7 @@ class TodoController extends Controller
         }
         catch (\Throwable $th) {
             DB::rollBack();
-            return response()->errorJson([], [
+            return response()->errorJson([$th->getMessage()], [
                 'message' => 'Something went wrong. Please try again.'
             ], 500);
         }

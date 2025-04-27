@@ -14,7 +14,8 @@ class StoreRequest extends FormRequest
             'title'=>'required',
             'description'=>'required',
             'priority'=>'required|in:low,high,medium',
-            'isFavorite'=>'boolean'
+            'isFavorite'=>'boolean',
+            'due_date'=>'required|date_format:d-m-Y',
         ];
     }
 

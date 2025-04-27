@@ -60,4 +60,31 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+    public function forgetPassword(){
+        try {
+            DB::beginTransaction();
+                $user = $this->userService->login($request->all());
+                
+                if(!$user){
+                    return response()->errorJson([], [
+                        'message' => 'Invalid Credentials.'
+                    ], 401);
+                }
+
+                $session_token = $this->userService->generateToken();
+                $session = $this->userSessionService->store(['token'=> $session_token,'user_id'=>$user->id]);
+                
+            DB::commit();
+            return response()->successJson($session, [
+                'message' => 'Here is your token.'
+            ], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->errorJson([$th->getMessage()], [
+                'message' => 'Something went wrong. Please try again.'
+            ], 500);
+        }
+    }
+
 }
