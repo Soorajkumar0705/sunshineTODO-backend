@@ -39,14 +39,14 @@ class TodoController extends Controller
             DB::beginTransaction();
             
             $user_id = $request->get('user')->id;
-            $date = Carbon::parse($request->due_date)->toDateString();
+            // $date = Carbon::parse($request->due_date)->toDateString();
             
                 $payload = [
                     'user_id'=>$user_id,
                     'title'=>$request->title,
                     'description'=>$request->description,
                     'priority'=>$request->priority,
-                    'due_date'=>$date,
+                    'due_date'=>$request->due_date,
                 ];
                 
                 $todo = $this->todoService->store($payload);
